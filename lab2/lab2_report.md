@@ -9,3 +9,49 @@ Date of create: 04.05.2026
 Date of finished: 
 
 # Отчёт по лабораторной работе №2 **«Исследование Cloud Run.»**
+
+### Шаг 1. Создание Cloud Run сервиса  
+
+* Вошла в Google Cloud Console и перешла в раздел Cloud Run;  
+* Нажала Deploy container для развёртывания нового сервиса с указанием параметров:  
+```text
+Service name: hello-cloud-run-lab2-aantipina.
+Region: europe-north1.
+Ресурсы: минимальные (CPU — 1, Memory — 256 MB, Concurrency — 80)
+```
+* Нажала Deploy → дождалась статуса Ready, в итоге был создан сервис:  
+<a>
+  <img src="images/img1.png" alt="Создание и настройка service" width="450">
+</a>
+
+### Шаг 2. Тестирование сервиса  
+Перешла по URL сервиса (https://hello-cloud-run-lab2-aantipina-307056602443.europe-north1.run.appc/);  
+Увидела что интерфейс полностью отображается:  
+
+<a>
+  <img src="images/img2.png" alt="Вид сервиса в браузере" width="450">
+</a>
+
+### Шаг 3. Анализ логов и метрик  
+
+* В Cloud Run перешла на страницу сервиса → вкладка Logs;
+* Увидела логи GET‑запросов к сайту и проанализироваламстатусы ответов (200 OK):
+
+<a>
+  <img src="images/img3.png" alt="Логи сервиса" width="450">
+</a>
+
+* Перешла во вкладку Metrics и изучила и их:
+
+`* End-to-end request latency, диапазон латентности: от 5 мс до 15 мс. — отображал рост при каждом запросе;`
+
+`* Latency breakdown, User execution: основной вклад в латентность — время работы кода сервиса;`  
+
+`* Container instance count, диапазон: от 0 до 1 инстанса, большинство времени работает 1 инстанс, что типично для низконагруженных сервисов;`  
+
+`*  Billable container instance time значение около 0.001 с/с. Низкое значение подтверждает низкую нагрузку — сервис экономичен с точки зрения затрат.`  
+
+
+<a>
+  <img src="images/img4.png" alt="Метрики сервиса" width="450">
+</a>
