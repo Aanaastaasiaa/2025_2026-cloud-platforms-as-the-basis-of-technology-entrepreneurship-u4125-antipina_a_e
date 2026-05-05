@@ -1,1 +1,16 @@
-# 2025_2026-cloud-platforms-as-the-basis-of-technology-entrepreneurship-u4125-antipina_a_e
+# Облачные платформы как основа технологического предпринимательства  
+
+Студент: Антипина Анастасия Евгеньевна  
+Курс: Cloud platforms as the basis of technology entrepreneurship  
+Год: 2025/2026  
+Группа: U4125  
+
+
+## Описание
+Репозиторий с лабораторными работами по курсу «Cloud platforms as the basis of technology entrepreneurship».
+
+## Структура
+- lab1 — Создание первого Telegram-бота без программирования
+- lab2 — Подключение бота к данным
+- lab3 — Запуск бота для реального использования
+- lab4 — Разработка инфраструктуры MVP AI приложения
