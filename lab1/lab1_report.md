@@ -26,34 +26,69 @@ Date of finished:
 </a>
 
 
-### Шаг 3. Составление промпта для LLM  
-Использован Cursor с моделью GPT для генерации кода.  
+### Шаг 3. Развёртывание Compute Engine (VM)  
 
-**Промпт:**  
-[Промт для Cursor](files/promt.md)
-
-### Шаг 4. Генерация кода  
-1. Промпт скопирован в Cursor.  
-2. Получен сгенерированный код.  
-3. Все файлы сохранены в папку проекта `telegram-feedback-bot`.  
-4. Токен бота вставлен в файл `.env` как `BOT_TOKEN`.  
+* Перешла в раздел Compute Engine → Create instance;  
+* Указала параметры:  
+```text 
+Name: aantipina-vm-lab1
+Machine type: e2-micro
+Networking: default
+Spot instance: включён
+```
+* Нажала Create → дождалась развёртывания VM.  
 <a>
-  <img src="images/img2.png" alt="Работа Cursor" width="300" >
+  <img src="images/img2.png" alt="Создание VM" width="450">
 </a>
-**Сгенерированные файлы:**  
-* `bot.py` — основной код бота;  
-* `requirements.txt` — список зависимостей;  
-* `README.md` — инструкция по запуску;  
-* `.env.example` — шаблон переменных окружения;  
-* `bot_data.db` — SQLite‑база данных (создаётся автоматически).  
 
+### Шаг 4. Копирование файлов из бакета на VM  
 
-### Шаг 5. Запуск и тестирование  
+* Подключилась к VM по SSH;  
+* Установила утилиту gcloud `sudo apt-get update && sudo apt-get install google-cloud-sdk`;  
+* Инициализировала gcloud: `gcloud init`;  
+
 <a>
-  <img src="images/img3.png" alt="Запуск бота через терминал" width="450" height="300">
+  <img src="images/img3.png" alt="Подготовка к копированию файлов" width="450" >
 </a>
-Бот был запушен, все функции успешно выполняются.  
-Видео с работой бота (включает в себя функционал первой и второй лабораторных работ):  
-<a href="[ссылка_на_видео](https://disk.yandex.ru/d/UpqRUK7X4n-4Jg)">
-  <img src="images/img4.png" alt="Видео с работой бота" width="450">
+
+* Из бакета lab1-bucket-itmo скопировала 3 файла в локальную папку:
+
+<a>
+  <img src="images/img4.png" alt="Копирование файлов из бакета на VM " width="450" >
 </a>
+
+* Проверила содержимое папки: `ls -lah ~/lab1-files/` в результате на экране отобразился вывод трех файлов:
+
+<a>
+  <img src="images/img5.png" alt="Проверка наличия файлов " width="450" >
+</a>
+
+* Ради интереса сохранила данные файлы на локальном диске:  
+
+<a>
+  <img src="images/img6.png" alt="Содержание загруженных файлов" width="450" >
+</a>
+
+### Шаг 5. Изменение прав доступа и повторная попытка копирования  
+
+* Вернулась в Google Cloud Console → IAM & Admin → Service Accounts;  
+* Нашла свой service account и во вкладке Permissions заменила роль Storage Admin на Compute Viewer:  
+
+<a>
+  <img src="images/img7.png" alt="Смена роли во вкладке "Разрешения"" width="450" >
+</a>
+
+* Вернулась к SSH‑сессии на VM и повторила команду копирования `gsutil cp gs://lab1-bucket-itmo/* ~/lab1-files/`;
+* В результате получила ошибку доступа, что подтверждает, что роль Compute Viewer не позволяет работать с бакетами.  
+
+<a>
+  <img src="images/img8.png" alt="Ошибка доступа" width="450" >
+</a>
+
+* Далее все ресурсы были удалены.
+
+# Выводы:
+
+* Роль Storage Admin предоставляет полный доступ к Cloud Storage, что позволяет копировать файлы между бакетами и VM;
+* Роль Compute Viewer даёт только права на просмотр информации о Compute Engine и не позволяет работать с Cloud Storage, сервисные аккаунты должны иметь только необходимые права;
+* Spot — экономичный вариант для некритичных задач, но с риском прерывания работы.
